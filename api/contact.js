@@ -43,6 +43,7 @@ export default async function handler(req, res) {
     const emailParams = new EmailParams()
       .setFrom(sentFrom)
       .setTo(recipients)
+      .setBcc([new Recipient('nicholasgjelaj@outlook.com', 'Nicholas Gjelaj')])
       .setReplyTo(new Recipient(email, name))
       .setSubject(`New Lead: ${name} — ${projectType}`)
       .setHtml(
