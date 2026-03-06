@@ -42,10 +42,7 @@ export default async function handler(req, res) {
 
     const emailParams = new EmailParams()
       .setFrom(sentFrom)
-      .setTo([
-        new Recipient('info@anticavenetianplaster.com', 'Antica Venetian Plaster'),
-        new Recipient('nicholasgjelaj@outlook.com', 'Nicholas Gjelaj'),
-      ])
+      .setTo(recipients)
       .setReplyTo(new Recipient(email, name))
       .setSubject(`New Lead: ${name} — ${projectType}`)
       .setHtml(
@@ -151,6 +148,18 @@ export default async function handler(req, res) {
 
     await mailersend.email.send(emailParams)
     console.log('Inquiry email sent to info@anticavenetianplaster.com for lead:', name, projectType)
+
+    const backupParams = new EmailParams()
+      .setFrom(sentFrom)
+      .setTo([new Recipient('nicholasgjelaj@outlook.com', 'Nicholas Gjelaj')])
+      .setReplyTo(new Recipient(email, name))
+      .setSubject(`New Lead: ${name} — ${projectType}`)
+      .setHtml(emailParams.html)
+      .setText(emailParams.text)
+
+    await mailersend.email.send(backupParams).catch((err) => {
+      console.error('Backup email to Outlook failed:', err)
+    })
 
     const confirmationFrom = new Sender(
       'info@anticavenetianplaster.com',
