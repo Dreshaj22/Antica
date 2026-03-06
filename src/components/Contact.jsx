@@ -152,7 +152,7 @@ export default function Contact() {
                     htmlFor="phone"
                     className="text-[11px] font-medium tracking-[0.2em] uppercase text-charcoal/40"
                   >
-                    Phone Number <span className="font-normal text-charcoal/30">(optional)</span>
+                    Phone Number
                   </label>
                   <input
                     type="tel"
