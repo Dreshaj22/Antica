@@ -11,10 +11,17 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Please fill in all required fields.' })
   }
 
-  try {
-    const mailersend = new MailerSend({
-      apiKey: process.env.MAILERSEND_API_KEY,
+  const apiKey = process.env.MAILERSEND_API_KEY
+  if (!apiKey || typeof apiKey !== 'string' || !apiKey.trim()) {
+    console.error('MAILERSEND_API_KEY is missing or empty in Vercel environment variables.')
+    return res.status(503).json({
+      error:
+        'Email service is not configured. Please try again later or email us directly at info@anticavenetianplaster.com.',
     })
+  }
+
+  try {
+    const mailersend = new MailerSend({ apiKey: apiKey.trim() })
 
     const sentFrom = new Sender('info@anticavenetianplaster.com', 'Antica Website')
 
@@ -240,7 +247,26 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true })
   } catch (err) {
-    console.error('MailerSend error:', err)
-    return res.status(500).json({ error: 'Failed to send your inquiry. Please try again or email us directly.' })
+    const status = err?.body?.statusCode ?? err?.statusCode ?? err?.response?.status
+    const msg = err?.body?.message ?? err?.message ?? ''
+    console.error('MailerSend error:', status, msg, err)
+
+    if (status === 401) {
+      return res.status(503).json({
+        error:
+          'Email service configuration error. Please try again later or email us at info@anticavenetianplaster.com.',
+      })
+    }
+    if (status === 403 || status === 422) {
+      return res.status(503).json({
+        error:
+          'Email service is not fully set up yet. Please email us directly at info@anticavenetianplaster.com.',
+      })
+    }
+
+    return res.status(500).json({
+      error:
+        'Failed to send your inquiry. Please try again or email us directly at info@anticavenetianplaster.com.',
+    })
   }
 }
