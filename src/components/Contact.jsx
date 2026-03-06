@@ -39,9 +39,19 @@ export default function Contact() {
         body: JSON.stringify(form),
       })
 
+      const contentType = res.headers.get('content-type') || ''
+      if (!contentType.includes('application/json')) {
+        throw new Error('Unable to reach our server. Please try again or email us directly at info@anticavenetianplaster.com.')
+      }
+
+      const data = await res.json()
+
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
         throw new Error(data.error || 'Something went wrong.')
+      }
+
+      if (!data.success) {
+        throw new Error('Something went wrong. Please try again.')
       }
 
       setSubmitted(true)
