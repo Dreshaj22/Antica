@@ -42,7 +42,10 @@ export default async function handler(req, res) {
 
     const emailParams = new EmailParams()
       .setFrom(sentFrom)
-      .setTo(recipients)
+      .setTo([
+        new Recipient('info@anticavenetianplaster.com', 'Antica Venetian Plaster'),
+        new Recipient('nicholasgjelaj@outlook.com', 'Nicholas Gjelaj'),
+      ])
       .setReplyTo(new Recipient(email, name))
       .setSubject(`New Lead: ${name} — ${projectType}`)
       .setHtml(
