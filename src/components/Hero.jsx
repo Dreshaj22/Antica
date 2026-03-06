@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export default function Hero() {
   return (
@@ -66,12 +67,12 @@ export default function Hero() {
           transition={{ duration: 1, delay: 1.1 }}
           className="mt-8 flex flex-col items-center gap-3 sm:mt-12 sm:flex-row sm:justify-center sm:gap-4"
         >
-          <a
-            href="#portfolio"
+          <Link
+            to="/portfolio"
             className="w-full border border-charcoal bg-charcoal px-8 py-3.5 text-center text-xs font-medium tracking-[0.2em] uppercase text-ivory transition-all hover:bg-transparent hover:text-charcoal no-underline sm:w-auto sm:px-10"
           >
             View Portfolio
-          </a>
+          </Link>
           <a
             href="#contact"
             className="w-full border border-gold/40 bg-transparent px-8 py-3.5 text-center text-xs font-medium tracking-[0.2em] uppercase text-gold transition-all hover:border-gold hover:bg-gold hover:text-ivory no-underline sm:w-auto sm:px-10"

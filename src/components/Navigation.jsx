@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
 import logo from '../assets/antica-logo.png'
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -19,16 +21,20 @@ export default function Navigation() {
   }, [mobileOpen])
 
   const links = [
-    { label: 'Portfolio', href: '#portfolio' },
+    { label: 'Portfolio', href: '/portfolio', isRoute: true },
     { label: 'About', href: '#about' },
     { label: 'Finishes', href: '#finishes' },
   ]
 
-  const handleClick = (href) => {
+  const handleClick = (link) => {
     setMobileOpen(false)
-    setTimeout(() => {
-      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
-    }, mobileOpen ? 300 : 0)
+    if (link.isRoute) {
+      setTimeout(() => navigate(link.href), mobileOpen ? 300 : 0)
+    } else {
+      setTimeout(() => {
+        document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' })
+      }, mobileOpen ? 300 : 0)
+    }
   }
 
   return (
@@ -44,26 +50,26 @@ export default function Navigation() {
         }`}
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-12">
-          <a href="#" className="relative z-10 -ml-3 flex items-center gap-3 sm:-ml-4 lg:-ml-6">
+          <Link to="/" className="relative z-10 -ml-3 flex items-center gap-3 sm:-ml-4 lg:-ml-6">
             <img
               src={logo}
               alt="Antica Venetian Plaster"
               className="h-20 w-auto sm:h-24 lg:h-28"
             />
-          </a>
+          </Link>
 
           <div className="hidden items-center gap-10 md:flex">
             {links.map((link) => (
               <button
                 key={link.label}
-                onClick={() => handleClick(link.href)}
+                onClick={() => handleClick(link)}
                 className="relative cursor-pointer bg-transparent border-none text-sm font-light tracking-[0.15em] uppercase text-charcoal/80 transition-colors hover:text-gold"
               >
                 {link.label}
               </button>
             ))}
             <button
-              onClick={() => handleClick('#contact')}
+              onClick={() => handleClick({ href: '#contact' })}
               className="cursor-pointer border border-gold bg-transparent px-6 py-2.5 text-xs font-medium tracking-[0.2em] uppercase text-gold transition-all hover:bg-gold hover:text-ivory"
             >
               Request Quote
@@ -100,7 +106,7 @@ export default function Navigation() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 + 0.1 }}
-                  onClick={() => handleClick(link.href)}
+                  onClick={() => handleClick(link)}
                   className="cursor-pointer border-none bg-transparent font-serif text-2xl font-light tracking-wider text-charcoal sm:text-3xl"
                 >
                   {link.label}
@@ -110,7 +116,7 @@ export default function Navigation() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                onClick={() => handleClick('#contact')}
+                onClick={() => handleClick({ href: '#contact' })}
                 className="mt-4 cursor-pointer border border-gold bg-transparent px-8 py-3 text-sm font-medium tracking-[0.2em] uppercase text-gold"
               >
                 Request Quote
