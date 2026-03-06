@@ -22,23 +22,115 @@ export default async function handler(req, res) {
       new Recipient('info@anticavenetianplaster.com', 'Antica Venetian Plaster'),
     ]
 
+    const submittedAt = new Date().toLocaleString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'America/New_York',
+      timeZoneName: 'short',
+    })
+
     const emailParams = new EmailParams()
       .setFrom(sentFrom)
       .setTo(recipients)
       .setReplyTo(new Recipient(email, name))
-      .setSubject(`New Inquiry – ${projectType}`)
+      .setSubject(`New Lead: ${name} — ${projectType}`)
       .setHtml(
-        `<div style="font-family:sans-serif;color:#333;line-height:1.6">
-          <h2 style="color:#af944d">New Consultation Request</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Project Type:</strong> ${projectType}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message ? message.replace(/\n/g, '<br>') : '<em>No message provided</em>'}</p>
-        </div>`
+        `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background-color:#f8f6f1;font-family:'Georgia','Times New Roman',serif">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f6f1;padding:40px 20px">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;max-width:600px">
+
+          <tr>
+            <td style="background-color:#2c2c2c;padding:28px 40px;text-align:center">
+              <h1 style="margin:0;font-size:22px;font-weight:400;letter-spacing:6px;color:#af944d;font-family:'Georgia','Times New Roman',serif">
+                ANTICA
+              </h1>
+              <p style="margin:4px 0 0;font-size:10px;letter-spacing:4px;color:#d4c8a8;font-family:sans-serif">
+                VENETIAN PLASTER
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:32px 44px 16px">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#fefdfb;border:1px solid #efe9dc;border-radius:4px">
+                <tr>
+                  <td style="padding:20px 28px;text-align:center">
+                    <p style="margin:0 0 2px;font-size:10px;letter-spacing:3px;color:#af944d;font-family:sans-serif;text-transform:uppercase">New Consultation Lead</p>
+                    <p style="margin:0;font-size:12px;color:#999;font-family:sans-serif">${submittedAt}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:12px 44px 0">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:16px 0;border-bottom:1px solid #f0ede6">
+                    <p style="margin:0 0 4px;font-size:10px;letter-spacing:2px;color:#af944d;font-family:sans-serif;text-transform:uppercase">Client Name</p>
+                    <p style="margin:0;font-size:16px;color:#2c2c2c;font-weight:600">${name}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:16px 0;border-bottom:1px solid #f0ede6">
+                    <p style="margin:0 0 4px;font-size:10px;letter-spacing:2px;color:#af944d;font-family:sans-serif;text-transform:uppercase">Email</p>
+                    <p style="margin:0;font-size:15px">
+                      <a href="mailto:${email}" style="color:#2c2c2c;text-decoration:none">${email}</a>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:16px 0;border-bottom:1px solid #f0ede6">
+                    <p style="margin:0 0 4px;font-size:10px;letter-spacing:2px;color:#af944d;font-family:sans-serif;text-transform:uppercase">Requested Finish</p>
+                    <p style="margin:0;font-size:15px;color:#2c2c2c;font-weight:600">${projectType}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:16px 0">
+                    <p style="margin:0 0 4px;font-size:10px;letter-spacing:2px;color:#af944d;font-family:sans-serif;text-transform:uppercase">Message</p>
+                    <p style="margin:0;font-size:14px;color:#555;line-height:1.7">${message ? message.replace(/\n/g, '<br>') : '<em style="color:#bbb">No message provided</em>'}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:28px 44px 36px;text-align:center">
+              <a href="mailto:${email}?subject=Re:%20Your%20Antica%20Inquiry%20–%20${encodeURIComponent(projectType)}&body=Hi%20${encodeURIComponent(name.split(' ')[0])},%0A%0AThank%20you%20for%20your%20interest%20in%20Antica%20Venetian%20Plaster.%0A%0A"
+                style="display:inline-block;padding:14px 36px;background-color:#2c2c2c;color:#f8f6f1;font-size:11px;letter-spacing:3px;text-decoration:none;font-family:sans-serif;text-transform:uppercase">
+                Reply to ${name.split(' ')[0]}
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="border-top:1px solid #eee;padding:20px 44px;text-align:center">
+              <p style="margin:0;font-size:11px;color:#ccc;font-family:sans-serif">
+                This lead was submitted via anticavenetianplaster.com
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
       )
       .setText(
-        `New Consultation Request\n\nName: ${name}\nEmail: ${email}\nProject Type: ${projectType}\n\nMessage:\n${message || '(no message)'}`
+        `NEW CONSULTATION LEAD\n${submittedAt}\n${'—'.repeat(40)}\n\nClient: ${name}\nEmail: ${email}\nFinish: ${projectType}\n\nMessage:\n${message || '(No message provided)'}\n\n${'—'.repeat(40)}\nSubmitted via anticavenetianplaster.com`
       )
 
     await mailersend.email.send(emailParams)
