@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   try {
     const mailersend = new MailerSend({ apiKey: apiKey.trim() })
 
-    const sentFrom = new Sender('noreply@anticavenetianplaster.com', 'Antica Website')
+    const sentFrom = new Sender('info@anticavenetianplaster.com', 'Antica Website')
 
     const recipients = [
       new Recipient('info@anticavenetianplaster.com', 'Antica Venetian Plaster'),
