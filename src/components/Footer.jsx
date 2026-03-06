@@ -1,5 +1,6 @@
 import { Mail, Phone, MapPin } from 'lucide-react'
 import logo from '../assets/antica-logo.png'
+import ekomadeLogo from '../assets/ekomade-logo.png'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -69,9 +70,11 @@ export default function Footer() {
           <p className="text-[10px] font-light tracking-wider text-ivory/25 sm:text-xs">
             &copy; {year} Antica Venetian Plaster. All rights reserved.
           </p>
-          <p className="text-[10px] font-light tracking-wider text-ivory/25 sm:text-xs">
-            Crafted with tradition. Built with intention.
-          </p>
+          <span className="flex items-center gap-2 text-[10px] font-light tracking-wider text-ivory/25 sm:text-xs">
+            Powered by
+            <img src={ekomadeLogo} alt="EkoMade Labs" className="h-5 w-auto sm:h-6" />
+            EkoMade Labs
+          </span>
         </div>
       </div>
     </footer>
