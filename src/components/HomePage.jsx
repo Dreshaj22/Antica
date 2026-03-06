@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import Navigation from './Navigation'
 import Hero from './Hero'
 import About from './About'
@@ -8,6 +10,16 @@ import Contact from './Contact'
 import Footer from './Footer'
 
 export default function HomePage() {
+  const { hash } = useLocation()
+
+  useEffect(() => {
+    if (hash) {
+      setTimeout(() => {
+        document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    }
+  }, [hash])
+
   return (
     <div className="min-h-screen bg-ivory">
       <Navigation />

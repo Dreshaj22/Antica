@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { ArrowLeft, ArrowRight, X, ChevronLeft } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import categories from '../portfolioImages'
 import logo from '../assets/antica-logo.png'
 
 function PortfolioNav({ onBack }) {
   const [scrolled, setScrolled] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -38,12 +39,12 @@ function PortfolioNav({ onBack }) {
             <span className="hidden sm:inline">All Finishes</span>
           </button>
         )}
-        <Link
-          to="/#contact"
-          className="cursor-pointer border border-gold bg-transparent px-4 py-2 text-[10px] font-medium tracking-[0.2em] uppercase text-gold transition-all hover:bg-gold hover:text-ivory no-underline sm:px-6 sm:py-2.5 sm:text-xs"
+        <button
+          onClick={() => navigate('/#contact')}
+          className="cursor-pointer border border-gold bg-transparent px-4 py-2 text-[10px] font-medium tracking-[0.2em] uppercase text-gold transition-all hover:bg-gold hover:text-ivory sm:px-6 sm:py-2.5 sm:text-xs"
         >
           Request Quote
-        </Link>
+        </button>
       </nav>
     </motion.header>
   )
