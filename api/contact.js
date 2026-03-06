@@ -43,7 +43,6 @@ export default async function handler(req, res) {
     const emailParams = new EmailParams()
       .setFrom(sentFrom)
       .setTo(recipients)
-      .setBcc([new Recipient('nicholasgjelaj@outlook.com', 'Nicholas Gjelaj')])
       .setReplyTo(new Recipient(email, name))
       .setSubject(`New Lead: ${name} — ${projectType}`)
       .setHtml(
@@ -266,16 +265,8 @@ export default async function handler(req, res) {
           'Email service configuration error. Please try again later or email us at info@anticavenetianplaster.com.',
       })
     }
-    if (status === 403 || status === 422) {
-      return res.status(503).json({
-        error:
-          'Email service is not fully set up yet. Please email us directly at info@anticavenetianplaster.com.',
-      })
-    }
-
     return res.status(500).json({
-      error:
-        'Failed to send your inquiry. Please try again or email us directly at info@anticavenetianplaster.com.',
+      error: `Email error (${status || 'unknown'}): ${msg || 'Unknown error'}. Please email us directly at info@anticavenetianplaster.com.`,
     })
   }
 }
