@@ -35,12 +35,12 @@ function PortfolioNav({ onBack }) {
             className="flex cursor-pointer items-center gap-2 border-none bg-transparent text-xs font-medium tracking-[0.15em] uppercase text-charcoal/60 transition-colors hover:text-gold"
           >
             <ChevronLeft size={16} />
-            All Finishes
+            <span className="hidden sm:inline">All Finishes</span>
           </button>
         )}
         <Link
           to="/#contact"
-          className="hidden cursor-pointer border border-gold bg-transparent px-6 py-2.5 text-xs font-medium tracking-[0.2em] uppercase text-gold transition-all hover:bg-gold hover:text-ivory no-underline md:block"
+          className="cursor-pointer border border-gold bg-transparent px-4 py-2 text-[10px] font-medium tracking-[0.2em] uppercase text-gold transition-all hover:bg-gold hover:text-ivory no-underline sm:px-6 sm:py-2.5 sm:text-xs"
         >
           Request Quote
         </Link>
@@ -193,14 +193,6 @@ function GalleryView({ category, onBack }) {
             transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="mb-12 sm:mb-16"
           >
-            <button
-              onClick={onBack}
-              className="mb-8 flex cursor-pointer items-center gap-2 border-none bg-transparent text-xs font-medium tracking-[0.15em] uppercase text-charcoal/40 transition-colors hover:text-gold sm:mb-10"
-            >
-              <ChevronLeft size={14} />
-              Back to All Finishes
-            </button>
-
             <p className="mb-3 text-[10px] font-medium tracking-[0.35em] uppercase text-gold sm:text-xs">
               {category.subtitle}
             </p>
