@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Send, CheckCircle } from 'lucide-react'
+import { Send, CheckCircle, AlertCircle } from 'lucide-react'
 
 const finishOptions = [
   'Marmorino',
@@ -14,6 +14,8 @@ export default function Contact() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -25,9 +27,31 @@ export default function Contact() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
+    setSending(true)
+    setError('')
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.error || 'Something went wrong.')
+      }
+
+      setSubmitted(true)
+    } catch (err) {
+      setError(
+        err.message || 'Unable to send your inquiry. Please try again or email us directly at info@anticavenetianplaster.com.'
+      )
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -162,11 +186,25 @@ export default function Contact() {
                 />
               </div>
 
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6 flex items-start gap-3 border border-red-300/50 bg-red-50 p-4"
+                >
+                  <AlertCircle size={18} className="mt-0.5 shrink-0 text-red-500" strokeWidth={1.5} />
+                  <p className="text-xs font-light leading-relaxed tracking-wide text-red-700 sm:text-sm">
+                    {error}
+                  </p>
+                </motion.div>
+              )}
+
               <button
                 type="submit"
-                className="mt-8 flex w-full cursor-pointer items-center justify-center gap-3 border border-charcoal bg-charcoal px-8 py-3.5 text-xs font-medium tracking-[0.2em] uppercase text-ivory transition-all hover:bg-transparent hover:text-charcoal sm:mt-10 sm:w-auto sm:justify-start sm:px-10"
+                disabled={sending}
+                className="mt-8 flex w-full cursor-pointer items-center justify-center gap-3 border border-charcoal bg-charcoal px-8 py-3.5 text-xs font-medium tracking-[0.2em] uppercase text-ivory transition-all hover:bg-transparent hover:text-charcoal disabled:cursor-not-allowed disabled:opacity-50 sm:mt-10 sm:w-auto sm:justify-start sm:px-10"
               >
-                <span>Send Inquiry</span>
+                <span>{sending ? 'Sending...' : 'Send Inquiry'}</span>
                 <Send size={14} />
               </button>
             </form>
