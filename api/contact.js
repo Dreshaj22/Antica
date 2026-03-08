@@ -133,7 +133,7 @@ export default async function handler(req, res) {
 
   try {
     await sgMail.send({
-      to: ['ekod96@gmail.com', 'info@anticavenetianplaster.com'],
+      to: 'info@anticavenetianplaster.com',
       from: { email: 'info@anticavenetianplaster.com', name: 'Antica Website' },
       replyTo: { email, name },
       subject: `New Lead: ${name} — ${projectType}`,
